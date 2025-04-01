@@ -18,9 +18,10 @@ const IBAN_BANK_DATA_REGEX = /^(?:[A-Z]{2})?\d{2}(\d{3})/i;
 
 export class PolishValidators {
   static creditCard: ValidatorFn = control =>
-    isCreditCardNumberValid(control.value) ? {} : { creditCardNumber: true };
+    !control.value || isCreditCardNumberValid(control.value) ? {} : { creditCardNumber: true };
 
-  static doctorNumber: ValidatorFn = control => (isDoctorNumberValid(control.value) ? {} : { doctorNumber: true });
+  static doctorNumber: ValidatorFn = control =>
+    !control.value || isDoctorNumberValid(control.value) ? {} : { doctorNumber: true };
 
   static iban(options: {
     allowedBankNames?: BankName[];
@@ -29,6 +30,7 @@ export class PolishValidators {
   }): ValidatorFn {
     return control => {
       const v = control.value;
+      if (!v) return {};
       if (options.requireCountryCode && !/^[a-z]{2}/i.test(v)) {
         return { ibanCountryCodeRequired: true };
       }
@@ -53,17 +55,19 @@ export class PolishValidators {
     };
   }
 
-  static idCard: ValidatorFn = control => (isIdCardNumberValid(control.value) ? {} : { idCardNumber: true });
+  static idCard: ValidatorFn = control =>
+    !control.value || isIdCardNumberValid(control.value) ? {} : { idCardNumber: true };
 
-  static imei: ValidatorFn = control => (isImeiValid(control.value) ? {} : { imei: true });
+  static imei: ValidatorFn = control => (!control.value || isImeiValid(control.value) ? {} : { imei: true });
 
-  static isbn: ValidatorFn = control => (isIsbnValid(control.value) ? {} : { isbn: true });
+  static isbn: ValidatorFn = control => (!control.value || isIsbnValid(control.value) ? {} : { isbn: true });
 
-  static nip: ValidatorFn = control => (isNipValid(control.value) ? {} : { nip: true });
+  static nip: ValidatorFn = control => (!control.value || isNipValid(control.value) ? {} : { nip: true });
 
-  static pesel: ValidatorFn = control => (isPeselValid(control.value) ? {} : { pesel: true });
+  static pesel: ValidatorFn = control => (!control.value || isPeselValid(control.value) ? {} : { pesel: true });
 
-  static postalCode: ValidatorFn = control => (isPostalCodeValid(control.value) ? {} : { postalCode: true });
+  static postalCode: ValidatorFn = control =>
+    !control.value || isPostalCodeValid(control.value) ? {} : { postalCode: true };
 
-  static regon: ValidatorFn = control => (isRegonValid(control.value) ? {} : { regon: true });
+  static regon: ValidatorFn = control => (!control.value || isRegonValid(control.value) ? {} : { regon: true });
 }
